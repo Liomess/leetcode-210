@@ -1,0 +1,36 @@
+class Solution:
+    def findOrder(self, n: int, pre: List[List[int]]) -> List[int]:
+        m=len(pre)
+        def dfs(adj,i,stack,vis):
+            vis[i]=1
+            for val in adj[i]:
+                if vis[val]==0:
+                    dfs(adj,val,stack,vis)
+            stack.append(i)
+        def iscycle(adj,vis,i,stack):
+            vis[i]=1
+            path[i]=1
+            for val in adj[i]:
+                if vis[val]==0:
+                    if iscycle(adj,vis,val,path):
+                        return True
+                elif path[val]==1:
+                    return True
+            path[i]=0
+            return False
+        adj=[[]for i in range(n)]
+        for i in range(m):
+            adj[pre[i][1]].append(pre[i][0])
+        vis=[0]*n
+        path=[0]*n
+        stack=[]
+        for i in range(n):
+            if vis[i]==0:
+                if iscycle(adj,vis,i,path):
+                    return []
+        vis=[0]*n
+        for i in range(n):
+            if vis[i]==0:
+                dfs(adj,i,stack,vis)
+        return stack[::-1]
+        
