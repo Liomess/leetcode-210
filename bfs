@@ -1,0 +1,26 @@
+from collections import deque
+class Solution:
+    def findOrder(self, n: int, pre: List[List[int]]) -> List[int]:
+        m=len(pre)
+        adj=[[]for i in range(n)]
+        for i in range(m):
+            adj[pre[i][1]].append(pre[i][0])
+        indegree=[0]*n
+        for i in range(m):
+            val=pre[i][0]
+            indegree[val]+=1
+        q=deque()
+        for i in range(n):
+            if indegree[i]==0:
+                q.append(i)
+        ans=[]
+        while len(q)!=0:
+            node=q.popleft()
+            ans.append(node)
+            for val in adj[node]:
+                indegree[val]-=1
+                if indegree[val]==0:
+                    q.append(val)
+        if len(ans)==n:
+            return ans
+        return []
